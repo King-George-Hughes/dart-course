@@ -1,3 +1,7 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:equatable/equatable.dart';
+import 'dart:math' as math;
+
 int time = 5;
 int? nullnableTopLevel;
 int nonNullableTopCode = 10;
@@ -99,4 +103,142 @@ void variables() {
   print('\u{1F339}');
   print(runes3);
   print('\u{1f970}\u{1f618}\u{1f60a}\u{1f601}\u{1f62d}');
+
+  // Functions
+  int first(int a, int b) {
+    return a + b;
+  }
+
+  void second(int Function(int) f, int a) {
+    print(f.call(a));
+    print(f(a));
+  }
+
+  var functionObject = first;
+  print(functionObject(2, 3));
+  second((e) => e + 5, 5);
+
+  var list =
+      ['hello', 'howdy', 'xup'].map((String s) => s.toUpperCase()).toList();
+  print(list);
+
+  // function calling another funtion
+  String Function(String) makeCar(String make) {
+    var engine = "4.4 V8";
+    return (model) => '$make $model $engine';
+  }
+
+  var car = makeCar("BMW");
+  print(car('Corolla'));
+
+  // how to call a class as a function
+  // var classFunc = A();
+  // classFunc();
+  A()();
+
+  // Arithmetic Operators
+  int x = 7;
+  int y = 3;
+
+  print(x - y);
+
+  // Comparism Operatior
+  // var b1 = B(1, 2);
+  // var b2 = B(1, 2);
+  var b1 = const B(1, 2);
+  var b2 = const B(1, 2);
+
+  print('b1 == b2: ${b1 == b2}');
+  print('identical(b1, b2): ${identical(b1, b2)}');
+
+  // IS operator
+  var lists = [1, 2.5, 'test', false, null]..forEach((element) {
+      if (element is int) {
+        print("$element is int");
+      } else if (element is double) {
+        print("$element is double");
+      } else if (element is bool) {
+        print("$element is bool");
+      } else if (element == null) {
+        print('$element is null');
+      }
+    });
+
+  print(lists);
+
+  // Exceptions
+  int min = -1, max = 2;
+  int zero = min + math.Random().nextInt(max - min);
+
+  print("Random zero: $zero");
+
+  try {
+    if (zero < 0) {
+      throw NegativeValue(message: 'Negative value');
+    } else if (zero > 0) {
+      throw PositiveValue(message: "Positive value");
+    }
+  } on NegativeValue {
+    print("The value is negative");
+  } catch (e) {
+    if (e is PositiveValue) {
+      print("The value is Positive");
+      rethrow;
+    }
+  } finally {
+    zero = 0;
+  }
+
+  if (zero == 0) {
+    print("Zero at the end: $zero");
+  }
+
+  // Classes
+}
+
+// Exceptions
+class NegativeValue implements Exception {
+  final String message;
+  NegativeValue({required this.message});
+}
+
+class PositiveValue implements Exception {
+  final String message;
+  PositiveValue({required this.message});
+}
+
+// Comparism Operatior
+// class B {
+//   final int a;
+//   final int b;
+
+//   // B(this.a, this.b);
+//   const B(this.a, this.b);
+
+//   @override
+//   bool operator ==(covariant B other) {
+//     if (identical(this, other)) return true;
+
+//     return other.a == a && other.b == b;
+//   }
+
+//   @override
+//   int get hashCode => a.hashCode ^ b.hashCode;
+// }
+
+class B extends Equatable {
+  final int a;
+  final int b;
+
+  const B(this.a, this.b);
+
+  @override
+  List<Object?> get props => [a, b];
+}
+
+// OR
+
+// how to call a class as a function
+class A {
+  void call() => print('This is a class function call!');
 }
